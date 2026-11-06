@@ -1,0 +1,21 @@
+sequenceDiagram
+  autonumber
+  actor U as ผู้ใช้
+  participant T as TripToolbar
+  participant St as TripStore
+  participant H as History
+  participant M as TripMemento
+  participant UI as หน้าจอที่ subscribe
+
+  U->>T: กด Undo
+  T->>St: undo()
+  St->>M: new TripMemento(trip ปัจจุบัน)
+  St->>H: undo(current)
+  H->>H: เก็บ current ลง redoStack
+  H-->>St: memento ก่อนหน้า (pop จาก undoStack)
+  St->>M: getState()
+  M-->>St: ข้อมูลทริปเดิม
+  St->>St: trip = Trip.fromJSON(state)
+  St->>St: notify()
+  St-->>UI: เรียก observer ทุกตัว
+  UI->>UI: render ทริปสถานะก่อนหน้า

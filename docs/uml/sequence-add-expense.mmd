@@ -1,0 +1,27 @@
+sequenceDiagram
+  autonumber
+  actor U as ผู้ใช้
+  participant F as ExpenseForm
+  participant S as ExpenseSplitter
+  participant P as PercentSplit
+  participant St as TripStore
+  participant H as History
+  participant UI as หน้าจอที่ subscribe
+
+  U->>F: กรอกรายการ เลือก "ตามเปอร์เซ็นต์"
+  F->>S: new ExpenseSplitter(getStrategy("percent"))
+  S-->>F: splitter (ถือ PercentSplit)
+  F->>S: validate(amount, participants, values)
+  S->>P: validate(...)
+  P-->>S: null (ผ่าน)
+  F->>S: split(amount, participants, values)
+  S->>P: split(...)
+  P-->>S: { คน: ยอด }
+  S-->>F: แสดงยอดของแต่ละคนให้ดูก่อน
+  U->>F: กด "บันทึกค่าใช้จ่าย"
+  F->>St: update(trip => trip.expenses.push(expense))
+  St->>H: save(new TripMemento(trip))
+  St->>St: สร้าง draft แล้วเรียก mutator
+  St->>St: notify()
+  St-->>UI: เรียก observer ทุกตัว
+  UI->>UI: render ใหม่ (สรุปยอด / ยอดโอนอัปเดต)

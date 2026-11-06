@@ -1,0 +1,168 @@
+classDiagram
+  direction TB
+
+  namespace Composite {
+    class TripComponent {
+      <<interface>>
+      +getCost() number
+      +getDuration() number
+    }
+    class Activity {
+      +id : string
+      +name : string
+      +start : string
+      +end : string
+      +cost : number
+      +place : string
+      +getCost() number
+      +getDuration() number
+      +overlaps(other: Activity) boolean
+      +toJSON() object
+    }
+    class Group {
+      <<abstract>>
+      #children : TripComponent[]
+      +add(child) Group
+      +remove(id) Group
+      +getCost() number
+      +getDuration() number
+    }
+    class Day {
+      +id : string
+      +date : string
+      +getConflicts() Activity[][]
+      +toJSON() object
+    }
+    class Trip {
+      +id : string
+      +name : string
+      +budget : number
+      +members : string[]
+      +expenses : Expense[]
+      +days : Day[]
+      +isOverBudget() boolean
+      +getTotalSpent() number
+      +toJSON() object
+      +fromJSON(data)$ Trip
+    }
+    class Expense {
+      <<data>>
+      +id : string
+      +title : string
+      +amount : number
+      +paidBy : string
+      +participants : string[]
+      +split : type, values
+    }
+  }
+
+  namespace Builder {
+    class TripBuilder {
+      -data : object
+      +setName(name) TripBuilder
+      +setBudget(budget) TripBuilder
+      +addMember(name) TripBuilder
+      +setDateRange(start, end) TripBuilder
+      +build() Trip
+    }
+  }
+
+  namespace Memento {
+    class TripMemento {
+      -state : string
+      +getState() object
+    }
+    class History {
+      -undoStack : TripMemento[]
+      -redoStack : TripMemento[]
+      -limit : number
+      +save(memento)
+      +undo(current) TripMemento
+      +redo(current) TripMemento
+      +canUndo() boolean
+      +canRedo() boolean
+    }
+  }
+
+  namespace Observer {
+    class TripStore {
+      -observers : Set~Function~
+      -version : number
+      +trip : Trip
+      +history : History
+      +subscribe(fn) Function
+      +getSnapshot() number
+      +notify()
+      +update(mutator)
+      +setTrip(trip)
+      +undo()
+      +redo()
+      +reset()
+    }
+    class useTrip {
+      <<React hook>>
+      +useTrip() Trip
+    }
+  }
+
+  namespace Strategy {
+    class SplitStrategy {
+      <<abstract>>
+      +type : string
+      +label : string
+      +validate(amount, participants, values) string
+      +split(amount, participants, values) Map
+    }
+    class EqualSplit {
+      +split(amount, participants) Map
+    }
+    class PercentSplit {
+      +validate(amount, participants, values) string
+      +split(amount, participants, values) Map
+    }
+    class ExactSplit {
+      +validate(amount, participants, values) string
+      +split(amount, participants, values) Map
+    }
+    class ExpenseSplitter {
+      -strategy : SplitStrategy
+      +setStrategy(strategy) ExpenseSplitter
+      +validate(amount, participants, values) string
+      +split(amount, participants, values) Map
+      +sharesOf(expense)$ Map
+    }
+  }
+
+  namespace Settlement {
+    class Settle {
+      <<module>>
+      +getBalances(trip) Balance[]
+      +getTransfers(balances) Transfer[]
+    }
+  }
+
+  TripComponent <|.. Activity
+  TripComponent <|.. Group
+  Group <|-- Day
+  Group <|-- Trip
+  Group o-- TripComponent : children
+  Trip *-- "1..*" Day
+  Day *-- "0..*" Activity
+  Trip *-- "0..*" Expense
+
+  TripBuilder ..> Trip : «create»
+  TripBuilder ..> Day : «create»
+
+  History o-- "0..50" TripMemento
+  TripStore *-- History
+  TripStore --> "0..1" Trip
+  TripStore ..> TripMemento : «create»
+  useTrip ..> TripStore : subscribe
+
+  SplitStrategy <|-- EqualSplit
+  SplitStrategy <|-- PercentSplit
+  SplitStrategy <|-- ExactSplit
+  ExpenseSplitter o-- SplitStrategy : strategy
+  ExpenseSplitter ..> Expense : uses
+  Settle ..> ExpenseSplitter : sharesOf
+  Settle ..> Trip : reads
