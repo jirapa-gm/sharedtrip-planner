@@ -1,55 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&family=Mali:wght@400;500;600;700&display=swap');
+
+/* ธีมพาสเทล: ชมพู/เหลือง/มิ้นท์ + ขอบม่วงเข้ม + เงาทึบ */
 :root {
-  --bg: #f5f7f6; --card: #fff; --text: #1d2b28; --muted: #6b7c78;
-  --accent: #0f766e; --accent-soft: #e0f2ef; --line: #e3e8e6;
-  --warn-bg: #fff4e5; --warn: #b45309; --neg: #b91c1c;
+  --ink: #3b2f55;
+  --ink-soft: #6e6288;
+  --bg: #fdf2f8;
+  --card: #ffffff;
+  --pink: #ffc8de;
+  --pink-strong: #ff8fb8;
+  --yellow: #fff0b0;
+  --mint: #c8f2df;
+  --blue: #d3e8ff;
+  --lilac: #ddd2fb;
+  --red: #ff6b8a;
+  --line: 2.5px solid var(--ink);
+  --shadow: 4px 4px 0 var(--ink);
+  --display: 'Kanit', 'Mali', sans-serif;
+  --body: 'Mali', 'Kanit', system-ui, sans-serif;
+  /* ชื่อเดิมที่ไฟล์อื่นอาจใช้อยู่ */
+  --text: var(--ink); --muted: var(--ink-soft); --accent: var(--pink-strong); --neg: #c2224a;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Prompt', system-ui, sans-serif; }
-button, input, select { font: inherit; }
-h1 { margin: 0; font-size: 1.6rem; }
-h2 { margin: 0 0 12px; font-size: 1.1rem; }
-.muted { color: var(--muted); font-weight: 400; }
-.app, .create { max-width: 880px; margin: 0 auto; padding: 24px 16px 48px; }
-.create { max-width: 520px; padding-top: 48px; }
+body {
+  margin: 0; min-height: 100vh; color: var(--ink); font: 500 15px/1.6 var(--body);
+  background:
+    radial-gradient(circle at 9% 18%, var(--blue) 0 56px, transparent 57px),
+    radial-gradient(circle at 91% 34%, var(--yellow) 0 74px, transparent 75px),
+    radial-gradient(circle at 7% 74%, var(--lilac) 0 46px, transparent 47px),
+    radial-gradient(circle at 84% 86%, var(--mint) 0 64px, transparent 65px),
+    var(--bg);
+  background-attachment: fixed;
+}
+button, input, select { font: inherit; color: inherit; }
+h1, h2 { font-family: var(--display); font-weight: 700; color: var(--ink); }
+h1 { margin: 0; font-size: 2.1rem; line-height: 1.2; }
+h2 { margin: 0 0 12px; font-size: 1.2rem; }
+.muted { color: var(--ink-soft); font-weight: 500; }
+:focus-visible { outline: 3px solid var(--pink-strong); outline-offset: 2px; }
+
+.app, .create { max-width: 880px; margin: 0 auto; padding: 32px 16px 56px; }
+
+/* ---------- หัวทริป ---------- */
 .header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
-.header p { margin: 4px 0 0; }
-.toolbar { display: flex; gap: 8px; }
-.toolbar button, .tabs button { border: 1px solid var(--line); background: var(--card); padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+.header p { margin: 6px 0 0; }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+.toolbar button {
+  border: var(--line); background: var(--card); padding: 6px 16px; border-radius: 999px;
+  font-weight: 600; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); transition: transform .08s, box-shadow .08s;
+}
+.toolbar button:hover:not(:disabled) { background: var(--yellow); }
+.toolbar button:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
 .toolbar button:disabled { opacity: .4; cursor: default; }
-.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0 12px; }
-.stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
-.stat span { display: block; color: var(--muted); font-size: .85rem; }
-.stat strong { font-size: 1.3rem; }
-.tabs { display: flex; gap: 8px; margin: 16px 0; }
-.tabs button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.stack { display: grid; gap: 16px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
-.form { display: grid; gap: 12px; margin-top: 20px; }
-.form label { display: grid; gap: 4px; font-size: .9rem; color: var(--muted); flex: 1; }
-.row { display: flex; gap: 12px; flex-wrap: wrap; }
-input, select { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: #fff; color: var(--text); }
-.primary { background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 10px 16px; cursor: pointer; }
-.link { background: none; border: 0; color: var(--muted); cursor: pointer; text-decoration: underline; }
-.file { font-size: .85rem; }
-.error { color: var(--neg); margin: 0; }
-.alert { background: var(--warn-bg); color: var(--warn); border-radius: 8px; padding: 10px 14px; margin: 8px 0; }
-.day-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; }
-.list { list-style: none; margin: 0 0 12px; padding: 0; }
-.list li { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
-.list li.clash { background: var(--warn-bg); }
-.time { font-variant-numeric: tabular-nums; color: var(--accent); min-width: 96px; }
-.grow { flex: 1; }
-.activity-form { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr auto; gap: 8px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { display: flex !important; align-items: center; gap: 6px; background: var(--accent-soft); color: var(--text) !important; padding: 6px 10px; border-radius: 999px; flex: 0 0 auto !important; }
-.weight { width: 70px; padding: 4px 6px; }
-.tag { background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 2px 8px; font-size: .8rem; }
-.pos { color: var(--accent); } .neg { color: var(--neg); }
-.bar-row { display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; margin: 8px 0; }
-.bar { background: var(--accent-soft); border-radius: 6px; height: 12px; overflow: hidden; }
-.bar div { background: var(--accent); height: 100%; }
-.footer { margin-top: 32px; text-align: center; }
+
+/* ---------- ตัวเลขสรุป ---------- */
+.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 22px 0 14px; }
+.stat { border: var(--line); border-radius: 20px; padding: 14px 18px; box-shadow: var(--shadow); background: var(--pink); }
+.stat:nth-child(2) { background: var(--yellow); }
+.stat:nth-child(3) { background: var(--mint); }
+.stat span { display: block; font-size: .88rem; font-weight: 600; }
+.stat strong { font: 700 1.6rem/1.3 var(--display); font-variant-numeric: tabular-nums; }
+
+.alert {
+  background: var(--yellow); color: var(--ink); border: var(--line); border-radius: 14px;
+  padding: 10px 16px; margin: 10px 0; font-weight: 600;
+}
+
+/* ---------- แท็บ ---------- */
+.tabs { display: flex; gap: 10px; margin: 22px 0 18px; flex-wrap: wrap; }
+.tabs button {
+  border: var(--line); background: var(--card); padding: 8px 20px; border-radius: 999px; white-space: nowrap;
+  font-weight: 600; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); transition: transform .08s, box-shadow .08s;
+}
+.tabs button:hover { background: var(--pink); }
+.tabs button.active { background: var(--pink-strong); transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+
+/* ---------- การ์ดและฟอร์ม ---------- */
+.stack { display: grid; gap: 22px; }
+.stack > * { min-width: 0; }
+.card { background: var(--card); border: var(--line); border-radius: 22px; padding: 22px 24px; box-shadow: var(--shadow); }
+.form { display: grid; gap: 14px; }
+.form label { display: grid; gap: 6px; font-size: .9rem; font-weight: 600; color: var(--ink); flex: 1; min-width: 150px; }
+.row { display: flex; gap: 14px; flex-wrap: wrap; }
+input, select {
+  border: var(--line); border-radius: 14px; padding: 9px 13px; background: var(--card); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink); min-width: 0;
+}
+input::placeholder { color: #b3a8c7; }
+input:focus, select:focus { outline: none; background: #fffdf3; }
+.primary {
+  background: var(--pink-strong); color: var(--ink); border: var(--line); border-radius: 999px; padding: 10px 22px;
+  font-weight: 700; cursor: pointer; box-shadow: var(--shadow); transition: transform .08s, box-shadow .08s;
+}
+.primary:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+.primary:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.link { background: none; border: 0; color: var(--ink-soft); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+.link:hover { color: var(--neg); }
+.error {
+  margin: 0; background: var(--card); border: 2px solid var(--red); color: var(--neg);
+  border-radius: 12px; padding: 8px 12px; font-weight: 600;
+}
+
+/* ---------- หน้าสร้างทริป ---------- */
+.create { max-width: 560px; padding-top: 72px; }
+.create > h1 { font-size: 2.8rem; }
+.create > p { margin: 8px 0 26px; }
+.create .card { background: var(--pink); border-radius: 26px; padding: 28px; }
+.create .primary { padding: 12px; font-size: 1.05rem; }
+.file { font-size: .88rem; }
+.file input[type=file] { background: var(--mint); cursor: pointer; }
+.file input[type=file]::file-selector-button {
+  border: 2px solid var(--ink); border-radius: 999px; background: var(--card); padding: 3px 12px; margin-right: 10px; font-weight: 600; cursor: pointer;
+}
+
+/* ---------- แผนการเดินทาง ---------- */
+.day-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.day-head h2 { margin: 0; }
+.list { list-style: none; margin: 0 0 16px; padding: 0; }
+.list li { display: flex; gap: 12px; align-items: center; padding: 11px 6px; border-bottom: 2px dashed #e3d9ee; }
+.list li:last-child { border-bottom: 0; }
+.list li.clash { background: var(--yellow); border-radius: 12px; border-bottom-color: transparent; }
+.time {
+  font-variant-numeric: tabular-nums; font-weight: 700; font-size: .9rem; white-space: nowrap;
+  background: var(--lilac); border: 2px solid var(--ink); border-radius: 999px; padding: 1px 10px;
+}
+.grow { flex: 1; min-width: 0; }
+.activity-form {
+  display: grid; grid-template-columns: 1.5fr 1.2fr 130px 130px 96px auto; gap: 10px;
+  padding-top: 16px; border-top: 2.5px dashed var(--ink);
+}
+.activity-form input { width: 100%; }
+.activity-form .primary { padding: 8px 18px; }
+
+.footer { margin-top: 40px; text-align: center; }
+
 @media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  .create > h1 { font-size: 2.2rem; }
   .summary { grid-template-columns: 1fr; }
+  .tabs button { padding: 7px 14px; }
   .activity-form { grid-template-columns: 1fr 1fr; }
+  .list li { flex-wrap: wrap; row-gap: 4px; }
+  .list li .grow { order: 3; flex-basis: 100%; }
+  .list li > span:nth-child(3) { margin-left: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .primary, .tabs button, .toolbar button { transition: none; }
 }
